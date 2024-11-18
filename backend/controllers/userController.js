@@ -75,7 +75,6 @@ export const login = catchAsyncErrors(async (req, res, next) => {
             new ErrorHandler("Email, Password, and Role are required", 400)
         );
     }
-
     // Find user by email
     const user = await User.findOne({ email }).select("+password"); // Explicitly include password
     if (!user) {
@@ -96,3 +95,14 @@ export const login = catchAsyncErrors(async (req, res, next) => {
     // Generate token and send response
     sendToken(user, 200, res, "User logged in successfully");
 });
+
+
+export const logout = catchAsyncErrors(async(req,res,next)=>{
+    res.status(200).cookie("token","",
+        { expires: new Date(Date.now()),
+            httpOnly: true,
+        }).json({
+        success:true,
+        message:"logged out Successfully"
+    })
+})
