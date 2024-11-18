@@ -34,8 +34,9 @@ const userSchema = new mongoose.Schema({
         type:String,
         required:true,
         minLength:[8,"Password must contain atleast 8 chracters"],
-        maxLength:[30,"Password can't exceed 30 chracters"]
-    },
+        maxLength:[30,"Password can't exceed 30 chracters"],
+        select :false,
+    }, 
     resume:{
         public_id:String,
         url:String
@@ -55,6 +56,31 @@ const userSchema = new mongoose.Schema({
         default:Date.now,
     }
 })
+// -------------------------------------------password security bcrypt
+userSchema.pre("save", async function (next) {
+    // Only hash the password if it is being modified
+    if (!this.isModified("password")) {
+        return next();
+    }
+    // Hash the password and store it
+    this.password = await bcrypt.hash(this.password, 10);
+    next();
+});
+
+
+
+
+
+// -------------------------------------comparing normal and encrypted password
+userSchema.methods.comparePassword = async function(enteredPassword) {
+    return await bcrypt.compare(enteredPassword,this.password);
+}
+
+
+
+
+
+
 
 // -----------------------------------------jwt work
 userSchema.methods.getJWTToken = function () {

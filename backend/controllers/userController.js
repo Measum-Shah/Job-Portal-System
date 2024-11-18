@@ -64,3 +64,35 @@ export const register = catchAsyncErrors(async(req,res,next)=>{
     next(error)
    }
 })
+
+
+export const login = catchAsyncErrors(async (req, res, next) => {
+    const { role, email, password } = req.body;
+
+    // Validate input
+    if (!role || !email || !password) {
+        return next(
+            new ErrorHandler("Email, Password, and Role are required", 400)
+        );
+    }
+
+    // Find user by email
+    const user = await User.findOne({ email }).select("+password"); // Explicitly include password
+    if (!user) {
+        return next(new ErrorHandler("Invalid Email or Password", 400));
+    }
+
+    // Check password
+    const isPasswordMatched = await user.comparePassword(password);
+    if (!isPasswordMatched) {
+        return next(new ErrorHandler("Invalid Email or Password", 400));
+    }
+
+    // Check role
+    if (user.role !== role) {
+        return next(new ErrorHandler("Invalid User Role", 400));
+    }
+
+    // Generate token and send response
+    sendToken(user, 200, res, "User logged in successfully");
+});
