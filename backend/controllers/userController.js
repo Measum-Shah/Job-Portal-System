@@ -82,7 +82,12 @@ export const register = catchAsyncErrors(async(req,res,next)=>{
    }
 })
 
+
+
+
 // -------------------------------------------------LOGIN-----------------------------------------
+
+
 export const login = catchAsyncErrors(async (req, res, next) => {
     const { role, email, password } = req.body;
 
@@ -113,7 +118,11 @@ export const login = catchAsyncErrors(async (req, res, next) => {
     sendToken(user, 200, res, "User logged in successfully");
 });
 
+
+
 // ----------------------------------logout-------------------------------------------
+
+
 export const logout = catchAsyncErrors(async(req,res,next)=>{
     res.status(200).cookie("token","",
         { expires: new Date(Date.now()),
@@ -124,6 +133,9 @@ export const logout = catchAsyncErrors(async(req,res,next)=>{
     })
 })
 
+// -------------------------userDetail-----------------------------------
+
+
 export const  getUser = catchAsyncErrors(async(req,res,next)=>{
     const user = req.user;
     res.status(200).json({
@@ -131,7 +143,10 @@ export const  getUser = catchAsyncErrors(async(req,res,next)=>{
         user,
     })
 })
+
 // -------------------------------------------UpdateProfile---------------------------------------
+
+
 export const updateProfile = catchAsyncErrors(async(req,res,next)=>{
     const newUserData={
         name: req.body.name,
