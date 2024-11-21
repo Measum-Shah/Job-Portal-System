@@ -11,6 +11,10 @@ const jobSchema = new mongoose.Schema({
         required:true,
         enum:["Full-time","Part=-time"]
     },
+    location:{
+        type:String,
+        required:true,
+    },
     companyName:{
         type:String,
         required:true,
@@ -39,8 +43,8 @@ const jobSchema = new mongoose.Schema({
         enum:["Yes","No"]
     },
     personalWebsite:{
-        type:String,
-        required:true,
+        title:String,
+        url:String,
     },
     jobNiche:{
         type:String,
