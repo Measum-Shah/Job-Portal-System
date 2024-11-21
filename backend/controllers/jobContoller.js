@@ -3,6 +3,10 @@ import ErrorHandler from "../middlewares/error.js";
 import { User } from "../models/userSchema.js";
 import { job } from "../models/jobSchema.js";
 
+
+// --------------------------POSTJOB---------------------------------------
+
+
 export const postJob = catchAsyncErrors(async (req, res, next) => {
     const {
         title,
@@ -59,3 +63,62 @@ export const postJob = catchAsyncErrors(async (req, res, next) => {
         jobDetails,
     });
 });
+
+
+// ----------------------------------GETALLJOBS---------------------
+
+
+export const getAllJobs = catchAsyncErrors(async(req,res,next)=>{
+    const  {city,niche,searchKeyword}=req.query;
+    const query = {};
+    if(city){
+        query.location = city;
+
+    }
+    if(niche){
+        query.jobNiche = niche;
+    }
+    if(searchKeyword){
+        query.$or = [
+            {title: {$regex: searchKeyword,$options:"i"}},
+            {companyName:{$regex: searchKeyword,$options:"i"}},
+            {introduction:{$regex: searchKeyword,$options:"i"}}
+        ]
+    }
+
+const jobs = await job.find(query);
+res.status(200).json({
+    success:true,
+    jobs,
+    count:jobs.length,
+})
+
+})
+
+
+
+// ----------------------------------GETMYJOBS---------------------------------
+
+
+export const getMyJobs = catchAsyncErrors(async(req,res,next)=>{
+    const myJobs = await job.find({postedBy:req.user._id});
+    res.status(200).json({
+        success:true,
+        myJobs,
+        count:myJobs.length,
+    })
+})
+
+
+// ----------------------------------DELJOBS---------------------------------
+export const deleteJob  = catchAsyncErrors(async(req,res,next)=>{
+
+})
+
+
+// -------------------------------GETASINGLEJOB------------------------------
+
+
+export const getASingleJob = catchAsyncErrors(async(req,res,next)=>{
+
+})
