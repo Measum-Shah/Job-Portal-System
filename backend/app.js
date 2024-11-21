@@ -6,6 +6,7 @@ import {connection} from "./database/connection.js";
 import { errorMiddleware } from "./middlewares/error.js";
 import fileUpload from "express-fileupload";
 import userRouter from "./router/userRouter.js";
+import jobRouter from "./router/jobRouter.js"
 
 const app = express();
 config({path:"./config/config.env"})
@@ -24,7 +25,7 @@ app.use(fileUpload({
     useTempFiles:true,
     tempFileDir:'/tmp/',}))
 app.use("/api/v1/user", userRouter)
-
+app.use("/api/v1/job", jobRouter)
 connection();
 app.use(errorMiddleware)
 export default app;
