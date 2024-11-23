@@ -5,6 +5,7 @@ const router = express.Router();
 
 
 router.post("/post/:id",isAuthenticated,isAuthorized("Job Seeker"),postApplication);
+// job id above
 
 router.get("/employer/getall",isAuthenticated,isAuthorized("Employer"),employerGetAllApplications)
 
